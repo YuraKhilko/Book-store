@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateBookRequestDto {
-    private Long id;
     private String title;
     private String author;
     private String isbn;
