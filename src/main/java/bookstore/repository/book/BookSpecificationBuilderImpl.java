@@ -31,14 +31,6 @@ public class BookSpecificationBuilderImpl implements BookSpecificationBuilder<Bo
             spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("price")
                     .getSpecification(searchParameters.prices()));
         }
-        if (searchParameters.descriptions() != null && searchParameters.descriptions().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("description")
-                    .getSpecification(searchParameters.descriptions()));
-        }
-        if (searchParameters.coverImages() != null && searchParameters.coverImages().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("coverImage")
-                    .getSpecification(searchParameters.coverImages()));
-        }
         return spec;
     }
 }
