@@ -1,4 +1,4 @@
-package bookstore.dto;
+package bookstore.dto.book;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Min;
