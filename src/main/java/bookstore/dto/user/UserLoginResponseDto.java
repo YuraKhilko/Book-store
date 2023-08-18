@@ -1,4 +1,10 @@
 package bookstore.dto.user;
 
-public record UserLoginResponseDto(String token) {
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Data
+public class UserLoginResponseDto {
+    private final String token;
 }

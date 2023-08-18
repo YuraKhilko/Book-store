@@ -1,7 +1,7 @@
 package bookstore.dto.user;
 
-import bookstore.validation.Email;
 import bookstore.validation.FieldMatch;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 

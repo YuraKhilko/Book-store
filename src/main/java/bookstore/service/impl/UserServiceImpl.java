@@ -4,9 +4,13 @@ import bookstore.dto.user.UserRegistrationRequestDto;
 import bookstore.dto.user.UserResponseDto;
 import bookstore.exception.RegistrationException;
 import bookstore.mapper.UserMapper;
+import bookstore.model.Role;
 import bookstore.model.User;
+import bookstore.repository.role.RoleRepository;
 import bookstore.repository.user.UserRepository;
 import bookstore.service.UserService;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,12 +21,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new RegistrationException("Unable to complete registration");
+            throw new RegistrationException("Email has already been registered");
         }
         User user = new User();
         user.setEmail(requestDto.getEmail());
@@ -30,6 +35,11 @@ public class UserServiceImpl implements UserService {
         user.setLastName(requestDto.getLastName());
         user.setShippingAddress(requestDto.getShippingAddress());
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        Role userRole = roleRepository.findRoleByName(Role.RoleName.USER)
+                        .orElseThrow(() -> new RegistrationException("Can't find Role by name"));
+        Set<Role> defaultUserRoleSet = new HashSet<>();
+        defaultUserRoleSet.add(userRole);
+        user.setRoles(defaultUserRoleSet);
         return userMapper.toResponseDto(userRepository.save(user));
     }
 }

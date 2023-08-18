@@ -1,11 +1,13 @@
 package bookstore.dto.user;
 
-import bookstore.validation.Email;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-public record UserLoginRequestDto(
-        @Email
-        String email,
-        @NotBlank
-        String password) {
+@Data
+public class UserLoginRequestDto {
+    @Email
+    private String email;
+    @NotBlank
+    private String password;
 }
