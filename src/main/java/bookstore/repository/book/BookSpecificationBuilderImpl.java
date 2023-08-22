@@ -31,6 +31,10 @@ public class BookSpecificationBuilderImpl implements BookSpecificationBuilder<Bo
             spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("price")
                     .getSpecification(searchParameters.prices()));
         }
+        if (searchParameters.categories() != null && searchParameters.categories().length > 0) {
+            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("category")
+                    .getSpecification(searchParameters.categories()));
+        }
         return spec;
     }
 }
