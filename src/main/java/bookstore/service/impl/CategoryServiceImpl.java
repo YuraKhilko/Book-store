@@ -7,15 +7,12 @@ import bookstore.model.Category;
 import bookstore.repository.CategoryRepository;
 import bookstore.service.CategoryService;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.Named;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("CategoryService")
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
@@ -51,14 +48,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
-    }
-
-    @Named("getSetCategoriesByIds")
-    public Set<Category> getSetCategoriesByIds(Set<Long> longSet) {
-        Set<Category> categorySet = longSet.stream()
-                .map(categoryRepository::getById)
-                .collect(Collectors.toSet());
-        return categorySet;
     }
 
     private Category getById(Long id) {

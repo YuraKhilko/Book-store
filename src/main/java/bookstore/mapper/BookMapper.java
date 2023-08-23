@@ -5,22 +5,20 @@ import bookstore.dto.book.BookDto;
 import bookstore.dto.book.BookDtoWithoutCategoryIds;
 import bookstore.dto.book.CreateBookRequestDto;
 import bookstore.model.Book;
-import bookstore.service.impl.CategoryServiceImpl;
+import bookstore.model.Category;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
 
-@Mapper(config = MapperConfig.class, uses = CategoryServiceImpl.class)
+@Mapper(config = MapperConfig.class)
 public interface BookMapper {
 
     BookDto toDto(Book book);
 
-    @Mapping(target = "categories",
-            qualifiedByName = { "CategoryService", "getSetCategoriesByIds" })
+    @Mapping(target = "categories", ignore = true)
     Book toEntity(CreateBookRequestDto requestDto);
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
@@ -33,8 +31,13 @@ public interface BookMapper {
         bookDto.setCategoryIds(longSet);
     }
 
-    @Named("bookFromId")
-    default Book bookFromId(Long id) {
-        return null;
+    @AfterMapping
+    default void setCategories(@MappingTarget Book book, CreateBookRequestDto requestDto) {
+        if (!requestDto.getCategories().isEmpty()) {
+            Set<Category> categories = requestDto.getCategories().stream()
+                    .map(id -> new Category(id))
+                    .collect(Collectors.toSet());
+            book.setCategories(categories);
+        }
     }
 }

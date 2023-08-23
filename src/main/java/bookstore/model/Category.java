@@ -36,8 +36,10 @@ public class Category {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private Set<Book> books;
 
-    /*    public void addBook(Book book) {
-            books.add(book);
-            book.getCategories().add(this);
-        }*/
+    public Category(Long id) {
+        this.id = id;
+    }
+
+    public Category() {
+    }
 }
