@@ -12,8 +12,10 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(config = MapperConfig.class)
+@Named("BookMapper")
 public interface BookMapper {
 
     BookDto toDto(Book book);
