@@ -3,6 +3,7 @@ package bookstore.controller;
 import bookstore.dto.cartitem.CreateCartItemRequestDto;
 import bookstore.dto.cartitem.UpdateCartItemRequestDto;
 import bookstore.dto.shoppingcart.ShoppingCartResponseDto;
+import bookstore.model.User;
 import bookstore.service.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +33,8 @@ public class ShoppingCartController {
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     public ShoppingCartResponseDto getShoppingCart(Authentication authentication) {
-        String email = authentication.getName();
-        return shoppingCartService.getShoppingCart(email);
+        User user = (User) authentication.getPrincipal();
+        return shoppingCartService.getById(user.getId());
     }
 
     @Operation(summary = "Add book to user's shopping cart",
@@ -44,8 +45,8 @@ public class ShoppingCartController {
             Authentication authentication,
             @RequestBody @Valid CreateCartItemRequestDto requestDto
     ) {
-        String email = authentication.getName();
-        return shoppingCartService.addCartItem(email, requestDto);
+        User user = (User) authentication.getPrincipal();
+        return shoppingCartService.addCartItem(user.getId(), requestDto);
     }
 
     @Operation(summary = "Update book in user's shopping cart",
@@ -57,8 +58,8 @@ public class ShoppingCartController {
             @PathVariable Long itemId,
             @RequestBody @Valid UpdateCartItemRequestDto requestDto
     ) {
-        String email = authentication.getName();
-        return shoppingCartService.updateCartItem(email, itemId, requestDto);
+        User user = (User) authentication.getPrincipal();
+        return shoppingCartService.updateCartItem(user.getId(), itemId, requestDto);
     }
 
     @Operation(summary = "Delete book from user's shopping cart",
@@ -69,7 +70,7 @@ public class ShoppingCartController {
             Authentication authentication,
             @PathVariable Long cartItemId
     ) {
-        String email = authentication.getName();
-        return shoppingCartService.deleteCartItem(email, cartItemId);
+        User user = (User) authentication.getPrincipal();
+        return shoppingCartService.deleteCartItem(user.getId(), cartItemId);
     }
 }

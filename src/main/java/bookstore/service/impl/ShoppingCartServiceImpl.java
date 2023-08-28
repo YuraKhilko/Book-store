@@ -8,10 +8,8 @@ import bookstore.mapper.CartItemMapper;
 import bookstore.mapper.ShoppingCartMapper;
 import bookstore.model.CartItem;
 import bookstore.model.ShoppingCart;
-import bookstore.model.User;
 import bookstore.repository.CartItemRepository;
 import bookstore.repository.ShoppingCartRepository;
-import bookstore.repository.UserRepository;
 import bookstore.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,32 +17,31 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
-    private final UserRepository userRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
     private final CartItemMapper cartItemMapper;
     private final CartItemRepository cartItemRepository;
 
     @Override
-    public ShoppingCartResponseDto getShoppingCart(String email) {
-        return shoppingCartMapper.toDto(getShoppingCartByEmail(email));
+    public ShoppingCartResponseDto getById(Long userId) {
+        return shoppingCartMapper.toDto(getShoppingCartById(userId));
     }
 
     @Override
     public ShoppingCartResponseDto addCartItem(
-            String email,
+            Long userId,
             CreateCartItemRequestDto requestDto
     ) {
-        ShoppingCart shoppingCart = getShoppingCartByEmail(email);
+        ShoppingCart shoppingCart = getShoppingCartById(userId);
         CartItem cartItem = cartItemMapper.toEntity(requestDto);
         cartItem.setShoppingCart(shoppingCart);
         cartItemRepository.save(cartItem);
-        return shoppingCartMapper.toDto(getShoppingCartByEmail(email));
+        return shoppingCartMapper.toDto(getShoppingCartById(userId));
     }
 
     @Override
     public ShoppingCartResponseDto updateCartItem(
-            String email,
+            Long userId,
             Long cartItemId,
             UpdateCartItemRequestDto requestDto
     ) {
@@ -53,21 +50,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         CartItem cartItem = cartItemMapper.toEntity(requestDto);
         cartItemFromDb.setQuantity(cartItem.getQuantity());
         cartItemRepository.save(cartItemFromDb);
-        return shoppingCartMapper.toDto(getShoppingCartByEmail(email));
+        return shoppingCartMapper.toDto(getShoppingCartById(userId));
     }
 
     @Override
-    public ShoppingCartResponseDto deleteCartItem(String email, Long cartItemId) {
+    public ShoppingCartResponseDto deleteCartItem(Long userId, Long cartItemId) {
         cartItemRepository.deleteById(cartItemId);
-        return shoppingCartMapper.toDto(getShoppingCartByEmail(email));
+        return shoppingCartMapper.toDto(getShoppingCartById(userId));
     }
 
-    private ShoppingCart getShoppingCartByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() ->
-                new RuntimeException("Can't find user by email " + email));
-        return shoppingCartRepository.findByUserId(user.getId())
+    private ShoppingCart getShoppingCartById(Long userId) {
+        return shoppingCartRepository.findById(userId)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Can't find shopping cart by id "
-                                + user.getId()));
+                        new EntityNotFoundException("Can't find shopping cart by userId "
+                                + userId));
+
     }
 }

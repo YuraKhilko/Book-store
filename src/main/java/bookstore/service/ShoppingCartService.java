@@ -5,12 +5,12 @@ import bookstore.dto.cartitem.UpdateCartItemRequestDto;
 import bookstore.dto.shoppingcart.ShoppingCartResponseDto;
 
 public interface ShoppingCartService {
-    ShoppingCartResponseDto getShoppingCart(String email);
+    ShoppingCartResponseDto getById(Long userId);
 
-    ShoppingCartResponseDto addCartItem(String email, CreateCartItemRequestDto requestDto);
+    ShoppingCartResponseDto addCartItem(Long userId, CreateCartItemRequestDto requestDto);
 
-    ShoppingCartResponseDto updateCartItem(String email, Long cartItemId,
+    ShoppingCartResponseDto updateCartItem(Long userId, Long cartItemId,
                                            UpdateCartItemRequestDto requestDto);
 
-    ShoppingCartResponseDto deleteCartItem(String email, Long cartItemId);
+    ShoppingCartResponseDto deleteCartItem(Long userId, Long cartItemId);
 }

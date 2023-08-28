@@ -3,7 +3,7 @@ package bookstore.dto.cartitem;
 import lombok.Data;
 
 @Data
-public class CartItemResponseDtoForShoppingCart {
+public class CartItemResponseDto {
     private Long id;
     private Long bookId;
     private String bookTitle;
