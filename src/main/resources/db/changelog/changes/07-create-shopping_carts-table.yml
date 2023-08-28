@@ -6,13 +6,6 @@ databaseChangeLog:
         - createTable:
             tableName: shopping_carts
             columns:
-#                - column:
-#                      name: id
-#                      type: bigint
-#                      autoIncrement: true
-#                      constraints:
-#                          primaryKey: true
-#                          nullable: false
                 - column:
                       name: user_id
                       type: bigint
@@ -22,9 +15,3 @@ databaseChangeLog:
                           referencedTableName: users
                           referencedColumnNames: id
                           primaryKey: true
-                - column:
-                    name: is_deleted
-                    type: boolean
-                    defaultValueBoolean: false
-                    constraints:
-                      nullable: false
