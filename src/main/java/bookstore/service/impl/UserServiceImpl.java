@@ -5,8 +5,10 @@ import bookstore.dto.user.UserResponseDto;
 import bookstore.exception.RegistrationException;
 import bookstore.mapper.UserMapper;
 import bookstore.model.Role;
+import bookstore.model.ShoppingCart;
 import bookstore.model.User;
 import bookstore.repository.RoleRepository;
+import bookstore.repository.ShoppingCartRepository;
 import bookstore.repository.UserRepository;
 import bookstore.service.UserService;
 import java.util.HashSet;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ShoppingCartRepository shoppingCartRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
@@ -35,11 +38,17 @@ public class UserServiceImpl implements UserService {
         user.setLastName(requestDto.getLastName());
         user.setShippingAddress(requestDto.getShippingAddress());
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+
         Role userRole = roleRepository.findRoleByName(Role.RoleName.USER)
                         .orElseThrow(() -> new RegistrationException("Can't find Role by name"));
         Set<Role> defaultUserRoleSet = new HashSet<>();
         defaultUserRoleSet.add(userRole);
         user.setRoles(defaultUserRoleSet);
-        return userMapper.toResponseDto(userRepository.save(user));
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(user);
+        shoppingCartRepository.save(shoppingCart);
+
+        return userMapper.toResponseDto(user);
     }
 }
