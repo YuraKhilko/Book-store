@@ -3,6 +3,7 @@ package bookstore.service;
 import bookstore.dto.cartitem.CreateCartItemRequestDto;
 import bookstore.dto.cartitem.UpdateCartItemRequestDto;
 import bookstore.dto.shoppingcart.ShoppingCartResponseDto;
+import bookstore.model.ShoppingCart;
 
 public interface ShoppingCartService {
     ShoppingCartResponseDto getById(Long userId);
@@ -13,4 +14,8 @@ public interface ShoppingCartService {
                                            UpdateCartItemRequestDto requestDto);
 
     ShoppingCartResponseDto deleteCartItem(Long userId, Long cartItemId);
+
+    ShoppingCart getShoppingCartById(Long userId);
+
+    void clearShoppingCart(ShoppingCart shoppingCart);
 }

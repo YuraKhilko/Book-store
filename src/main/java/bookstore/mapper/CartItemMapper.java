@@ -20,7 +20,7 @@ public interface CartItemMapper {
     CartItem toEntity(UpdateCartItemRequestDto requestDto);
 
     @Mapping(target = "bookId", source = "book.id")
-    @Mapping(target = "bookTitle", source = "book.author")
+    @Mapping(target = "bookTitle", source = "book.title")
     CartItemResponseDto toDto(CartItem cartItem);
 
     @AfterMapping

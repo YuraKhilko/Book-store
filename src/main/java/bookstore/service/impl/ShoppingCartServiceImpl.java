@@ -11,6 +11,7 @@ import bookstore.model.ShoppingCart;
 import bookstore.repository.CartItemRepository;
 import bookstore.repository.ShoppingCartRepository;
 import bookstore.service.ShoppingCartService;
+import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toDto(getShoppingCartById(userId));
     }
 
-    private ShoppingCart getShoppingCartById(Long userId) {
+    @Override
+    public void clearShoppingCart(ShoppingCart shoppingCart) {
+        shoppingCart.setCartItems(new HashSet<>());
+        cartItemRepository.deleteByShoppingCart_Id(shoppingCart.getId());
+    }
+
+    public ShoppingCart getShoppingCartById(Long userId) {
         return shoppingCartRepository.findById(userId)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Can't find shopping cart by userId "
