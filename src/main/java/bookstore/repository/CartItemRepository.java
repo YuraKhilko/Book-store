@@ -1,10 +1,12 @@
 package bookstore.repository;
 
 import bookstore.model.CartItem;
-import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-    @SQLDelete(sql = "DELETE FROM cart_items WHERE shopping_cart_id = :shoppingCartId")
+    @Modifying
+    @Query("DELETE FROM CartItem c WHERE c.shoppingCart.id = :shoppingCartId")
     void deleteByShoppingCart_Id(Long shoppingCartId);
 }

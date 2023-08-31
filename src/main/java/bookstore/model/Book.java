@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,4 +47,21 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Book book = (Book) o;
+        return Objects.equals(id, book.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

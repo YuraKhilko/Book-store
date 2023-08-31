@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,4 +31,21 @@ public class OrderItem {
     private Integer quantity;
     @Column(name = "price", nullable = false)
     private BigDecimal price;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        OrderItem orderItem = (OrderItem) o;
+        return Objects.equals(book, orderItem.book);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(book);
+    }
 }

@@ -3,6 +3,7 @@ package bookstore.service.impl;
 import bookstore.dto.cartitem.CreateCartItemRequestDto;
 import bookstore.dto.cartitem.UpdateCartItemRequestDto;
 import bookstore.dto.shoppingcart.ShoppingCartResponseDto;
+import bookstore.exception.DuplicateEntityException;
 import bookstore.exception.EntityNotFoundException;
 import bookstore.mapper.CartItemMapper;
 import bookstore.mapper.ShoppingCartMapper;
@@ -35,6 +36,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     ) {
         ShoppingCart shoppingCart = getShoppingCartById(userId);
         CartItem cartItem = cartItemMapper.toEntity(requestDto);
+        if (shoppingCart.getCartItems().contains(cartItem)) {
+            throw new DuplicateEntityException("Book has been already added");
+        }
         cartItem.setShoppingCart(shoppingCart);
         cartItemRepository.save(cartItem);
         return shoppingCartMapper.toDto(getShoppingCartById(userId));
