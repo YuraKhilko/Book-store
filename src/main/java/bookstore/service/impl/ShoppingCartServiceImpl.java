@@ -3,6 +3,7 @@ package bookstore.service.impl;
 import bookstore.dto.cartitem.CreateCartItemRequestDto;
 import bookstore.dto.cartitem.UpdateCartItemRequestDto;
 import bookstore.dto.shoppingcart.ShoppingCartResponseDto;
+import bookstore.exception.DuplicateEntityException;
 import bookstore.exception.EntityNotFoundException;
 import bookstore.mapper.CartItemMapper;
 import bookstore.mapper.ShoppingCartMapper;
@@ -11,6 +12,7 @@ import bookstore.model.ShoppingCart;
 import bookstore.repository.CartItemRepository;
 import bookstore.repository.ShoppingCartRepository;
 import bookstore.service.ShoppingCartService;
+import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     ) {
         ShoppingCart shoppingCart = getShoppingCartById(userId);
         CartItem cartItem = cartItemMapper.toEntity(requestDto);
+        if (shoppingCart.getCartItems().contains(cartItem)) {
+            throw new DuplicateEntityException("Book has been already added");
+        }
         cartItem.setShoppingCart(shoppingCart);
         cartItemRepository.save(cartItem);
         return shoppingCartMapper.toDto(getShoppingCartById(userId));
@@ -59,7 +64,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toDto(getShoppingCartById(userId));
     }
 
-    private ShoppingCart getShoppingCartById(Long userId) {
+    @Override
+    public void clearShoppingCart(ShoppingCart shoppingCart) {
+        shoppingCart.setCartItems(new HashSet<>());
+        cartItemRepository.deleteByShoppingCart_Id(shoppingCart.getId());
+    }
+
+    public ShoppingCart getShoppingCartById(Long userId) {
         return shoppingCartRepository.findById(userId)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Can't find shopping cart by userId "

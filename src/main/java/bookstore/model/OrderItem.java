@@ -2,33 +2,35 @@ package bookstore.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE roles SET is_deleted = TRUE WHERE id = ?")
-@Where(clause = "is_deleted = FALSE")
-@Table(name = "roles")
-public class Role {
+@Table(name = "order_items")
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "name", unique = true, nullable = false)
-    private RoleName name;
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
 
     @Override
     public boolean equals(Object o) {
@@ -38,17 +40,12 @@ public class Role {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Role role = (Role) o;
-        return name == role.name;
+        OrderItem orderItem = (OrderItem) o;
+        return Objects.equals(book, orderItem.book);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    public enum RoleName {
-        ADMIN,
-        USER
+        return Objects.hash(book);
     }
 }
