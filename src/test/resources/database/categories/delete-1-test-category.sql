@@ -1,1 +1,1 @@
-DELETE FROM categories where name = 'Name_Delete1';
+DELETE FROM categories WHERE name  LIKE 'Name_Delete1%';

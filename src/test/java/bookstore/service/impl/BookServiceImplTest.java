@@ -102,7 +102,7 @@ class BookServiceImplTest {
         // Then
         assertThat(actual).hasSize(1);
         assertThat(actual.get(0)).isEqualTo(expected);
-        verify(bookRepository, times(1)).findAll();
+        verify(bookRepository, times(1)).findAll(pageable);
         verify(bookMapper, times(1)).toDto(book);
         verifyNoMoreInteractions(bookRepository, bookMapper);
     }
@@ -217,7 +217,7 @@ class BookServiceImplTest {
         // Then
         assertThat(actual).hasSize(1);
         assertThat(actual.get(0)).isEqualTo(expected);
-        verify(bookRepository, times(1)).findAll();
+        verify(bookRepository, times(1)).findAll(spec, pageable);
         verify(bookMapper, times(1)).toDto(book);
         verifyNoMoreInteractions(bookRepository, bookMapper);
     }

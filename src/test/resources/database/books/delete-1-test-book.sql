@@ -1,1 +1,1 @@
-DELETE FROM books where isbn = 'isbn-1';
+DELETE FROM books WHERE isbn LIKE 'isbn-1%';

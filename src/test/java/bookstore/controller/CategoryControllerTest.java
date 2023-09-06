@@ -177,7 +177,7 @@ class CategoryControllerTest {
         // Given
         long categoryId = -4L;
         CategoryDto expected = new CategoryDto()
-                .setName("Name_Delete1")
+                .setName("Name_Delete1_changed")
                 .setDescription("Description1");
 
         String jsonRequest = objectMapper.writeValueAsString(expected);
@@ -203,6 +203,10 @@ class CategoryControllerTest {
             scripts = "classpath:database/categories/insert-1-test-category.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
+    @Sql(
+            scripts = "classpath:database/categories/delete-1-test-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
     @DisplayName("""
             Delete category by id
             """)
@@ -225,8 +229,8 @@ class CategoryControllerTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = {"classpath:database/books/delete-all-test-books.sql",
-                    "classpath:database/books_categories/delete-all-test-books-categories.sql"},
+            scripts = {"classpath:database/books_categories/delete-all-test-books-categories.sql",
+                    "classpath:database/books/delete-all-test-books.sql"},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("""

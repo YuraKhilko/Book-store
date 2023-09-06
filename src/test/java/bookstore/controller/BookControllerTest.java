@@ -93,13 +93,13 @@ class BookControllerTest {
         List<BookDto> expected = new ArrayList<>();
         expected.add(new BookDto().setId(1L).setTitle("Title1").setAuthor("Author1")
                 .setIsbn("isbn1").setPrice(BigDecimal.valueOf(1.99)).setDescription("Description1")
-                .setCoverImage("CoverImage1"));
+                .setCoverImage("CoverImage1").setCategoryIds(new HashSet<>()));
         expected.add(new BookDto().setId(2L).setTitle("Title2").setAuthor("Author2")
                 .setIsbn("isbn2").setPrice(BigDecimal.valueOf(2.99)).setDescription("Description2")
-                .setCoverImage("CoverImage2"));
+                .setCoverImage("CoverImage2").setCategoryIds(new HashSet<>()));
         expected.add(new BookDto().setId(3L).setTitle("Title3").setAuthor("Author3")
                 .setIsbn("isbn3").setPrice(BigDecimal.valueOf(3.99)).setDescription("Description3")
-                .setCoverImage("CoverImage3"));
+                .setCoverImage("CoverImage3").setCategoryIds(new HashSet<>()));
 
         // When
         MvcResult result = mockMvc.perform(get("/books")
@@ -212,7 +212,7 @@ class BookControllerTest {
                 new CreateBookRequestDto()
                         .setAuthor("Author-1")
                         .setTitle("Title-1")
-                        .setIsbn("isbn-1")
+                        .setIsbn("isbn-1_changed")
                         .setPrice(BigDecimal.TEN)
                         .setDescription("Description-1")
                         .setCoverImage("CoverImage-1")
@@ -220,6 +220,7 @@ class BookControllerTest {
 
         BookDto expected =
                 new BookDto()
+                        .setId(bookId)
                         .setAuthor(createBookRequestDto.getAuthor())
                         .setTitle(createBookRequestDto.getTitle())
                         .setIsbn(createBookRequestDto.getIsbn())
@@ -249,6 +250,10 @@ class BookControllerTest {
             scripts = "classpath:database/books/insert-1-test-book.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
+    @Sql(
+            scripts = "classpath:database/books/delete-1-test-book.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
     @DisplayName("""
             Delete book by id
             """)
@@ -273,7 +278,7 @@ class BookControllerTest {
         List<BookDto> expected = new ArrayList<>();
         expected.add(new BookDto().setId(1L).setTitle("Title1").setAuthor("Author1")
                 .setIsbn("isbn1").setPrice(BigDecimal.valueOf(1.99)).setDescription("Description1")
-                .setCoverImage("CoverImage1"));
+                .setCoverImage("CoverImage1").setCategoryIds(new HashSet<>()));
 
         // When
         MvcResult result = mockMvc.perform(get("/books/search?titles=Title1")

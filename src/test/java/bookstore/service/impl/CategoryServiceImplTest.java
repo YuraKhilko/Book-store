@@ -131,7 +131,7 @@ class CategoryServiceImplTest {
         // Then
         assertThat(actual).hasSize(1);
         assertThat(actual.get(0)).isEqualTo(expected);
-        verify(categoryRepository, times(1)).findAll();
+        verify(categoryRepository, times(1)).findAll(pageable);
         verify(categoryMapper, times(1)).toDto(category);
         verifyNoMoreInteractions(categoryRepository, categoryMapper);
     }
