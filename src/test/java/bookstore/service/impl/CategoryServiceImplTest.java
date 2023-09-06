@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import bookstore.dto.category.CategoryDto;
 import bookstore.exception.EntityNotFoundException;
@@ -44,17 +47,21 @@ class CategoryServiceImplTest {
 
         Category category = getCategoryByCategoryDto(categoryRequestDto);
 
-        CategoryDto expectedCategoryDto = getCategoryDtoByCategory(category);
+        CategoryDto expected = getCategoryDtoByCategory(category);
 
         Mockito.when(categoryMapper.toEntity(categoryRequestDto)).thenReturn(category);
         Mockito.when(categoryRepository.save(category)).thenReturn(category);
-        Mockito.when(categoryMapper.toDto(category)).thenReturn(expectedCategoryDto);
+        Mockito.when(categoryMapper.toDto(category)).thenReturn(expected);
 
         // When
-        CategoryDto actualCategoryDto = categoryServiceImpl.save(categoryRequestDto);
+        CategoryDto actual = categoryServiceImpl.save(categoryRequestDto);
 
         // Then
-        assertThat(actualCategoryDto).isEqualTo(expectedCategoryDto);
+        assertThat(actual).isEqualTo(expected);
+        verify(categoryRepository, times(1)).save(category);
+        verify(categoryMapper, times(1)).toEntity(categoryRequestDto);
+        verify(categoryMapper, times(1)).toDto(category);
+        verifyNoMoreInteractions(categoryRepository, categoryMapper);
     }
 
     @Test
@@ -75,6 +82,9 @@ class CategoryServiceImplTest {
 
         // Then
         assertEquals(expected, actual);
+        verify(categoryRepository, times(1)).findById(categoryId);
+        verify(categoryMapper, times(1)).toDto(category);
+        verifyNoMoreInteractions(categoryRepository, categoryMapper);
     }
 
     @Test
@@ -95,6 +105,8 @@ class CategoryServiceImplTest {
         String expected = "Can't find Category by id " + categoryId;
         String actual = exception.getMessage();
         assertEquals(expected, actual);
+        verify(categoryRepository, times(1)).findById(categoryId);
+        verifyNoMoreInteractions(categoryRepository);
     }
 
     @Test
@@ -104,21 +116,24 @@ class CategoryServiceImplTest {
     void findAll_ValidPageable_ReturnAllCategories() {
         // Given
         Category category = getCategory();
-        CategoryDto categoryDto = getCategoryDtoByCategory(category);
+        CategoryDto expected = getCategoryDtoByCategory(category);
 
         Pageable pageable = PageRequest.of(0, 10);
         List<Category> categories = List.of(category);
         Page<Category> categoryPage = new PageImpl<>(categories, pageable, categories.size());
 
         Mockito.when(categoryRepository.findAll(pageable)).thenReturn(categoryPage);
-        Mockito.when(categoryMapper.toDto(category)).thenReturn(categoryDto);
+        Mockito.when(categoryMapper.toDto(category)).thenReturn(expected);
 
         // When
-        List<CategoryDto> actualCategoryDtoList = categoryServiceImpl.findAll(pageable);
+        List<CategoryDto> actual = categoryServiceImpl.findAll(pageable);
 
         // Then
-        assertThat(actualCategoryDtoList).hasSize(1);
-        assertThat(actualCategoryDtoList.get(0)).isEqualTo(categoryDto);
+        assertThat(actual).hasSize(1);
+        assertThat(actual.get(0)).isEqualTo(expected);
+        verify(categoryRepository, times(1)).findAll();
+        verify(categoryMapper, times(1)).toDto(category);
+        verifyNoMoreInteractions(categoryRepository, categoryMapper);
     }
 
     @Test
@@ -142,6 +157,10 @@ class CategoryServiceImplTest {
 
         // Then
         assertThat(actualCategoryDto).isEqualTo(expectedCategoryDto);
+        verify(categoryRepository, times(1)).findById(anyLong());
+        verify(categoryRepository, times(1)).save(category);
+        verify(categoryMapper, times(1)).toDto(category);
+        verifyNoMoreInteractions(categoryRepository, categoryMapper);
     }
 
     @Test
