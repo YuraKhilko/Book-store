@@ -278,7 +278,7 @@ class BookServiceImplTest {
         book.setPrice(createBookRequestDto.getPrice());
         book.setDescription(createBookRequestDto.getDescription());
         book.setCoverImage(createBookRequestDto.getCoverImage());
-        book.setCategories(createBookRequestDto.getCategories().stream()
+        book.setCategories(createBookRequestDto.getCategoryIds().stream()
                 .map(l -> {
                     Category category = new Category();
                     category.setId(l);
@@ -296,7 +296,7 @@ class BookServiceImplTest {
         createBookRequestDto.setPrice(BigDecimal.TEN);
         createBookRequestDto.setDescription("Description1");
         createBookRequestDto.setCoverImage("CoverImage1");
-        createBookRequestDto.setCategories(new HashSet<>());
+        createBookRequestDto.setCategoryIds(new HashSet<>());
         return createBookRequestDto;
     }
 

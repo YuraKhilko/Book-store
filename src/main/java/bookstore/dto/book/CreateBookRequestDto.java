@@ -22,5 +22,5 @@ public class CreateBookRequestDto {
     private BigDecimal price;
     private String description;
     private String coverImage;
-    private Set<Long> categories;
+    private Set<Long> categoryIds;
 }
