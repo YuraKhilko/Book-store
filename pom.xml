@@ -18,7 +18,7 @@
         <maven.checkstyle.plugin.configLocation>checkstyle.xml</maven.checkstyle.plugin.configLocation>
         <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <jjvt.version>0.11.5</jjvt.version>
+        <jjwt.version>0.11.5</jjwt.version>
         <testcontainers.version>1.18.0</testcontainers.version>
     </properties>
     <dependencies>
@@ -91,17 +91,17 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>${jjvt.version}</version>
+            <version>${jjwt.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>${jjvt.version}</version>
+            <version>${jjwt.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>${jjvt.version}</version>
+            <version>${jjwt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>

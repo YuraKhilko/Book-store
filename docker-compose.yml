@@ -2,14 +2,14 @@ version: "3.8"
 
 services:
   mysqldb:
-    platform: linux/arm64
     image: mysql
     restart: unless-stopped
     env_file: ./.env
     environment:
       - MYSQL_USER=$MYSQL_USER
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
-      - MYSQL_DB=$MYSQL_DB
+      - MYSQL_DATABASE=$MYSQL_DB
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
     ports:
       - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
     healthcheck:

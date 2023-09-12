@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -24,5 +25,5 @@ public class CreateBookRequestDto {
     private BigDecimal price;
     private String description;
     private String coverImage;
-    private Set<Long> categoryIds;
+    private Set<Long> categoryIds = new HashSet<>();
 }

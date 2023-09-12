@@ -19,3 +19,5 @@ databaseChangeLog:
       file: db/changelog/changes/09-create-orders-table.yml
   - include:
       file: db/changelog/changes/10-create-order_items-table.yml
+  - include:
+      file: db/changelog/changes/11-insert-role-records.yml
